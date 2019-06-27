@@ -6,6 +6,31 @@ void RegisterShaderVars() {
   IntroduceNewShaderVar('vRayDirection', ShaderVarDesc(VarTypeVec3, ''));
 }
 
+final ShaderObject GradientVertexShader = ShaderObject("SkyGradientV")
+  ..AddAttributeVars([aPosition, aTexUV])
+  ..AddVaryingVars(['vRayDirection'])
+  ..AddUniformVars([uPerspectiveViewMatrix])
+  ..SetBody([
+    '''
+void main() {
+    mat3 invcamera = inverse(mat3(uPerspectiveViewMatrix));
+    vec3 clippos = vec3(aTexUV * 2.0 - 1.0, 0.99999);
+    vRayDirection = invcamera * clippos;
+    gl_Position = vec4(clippos, 1.0);
+}
+      '''
+  ]);
+
+final ShaderObject GradientFragmentShader = ShaderObject("SkyGradientF")
+  ..AddVaryingVars(['vRayDirection'])
+  ..SetBody([
+    '''
+void main() {
+    oFragColor = vec4(normalize(abs(vRayDirection)), 1.0);
+}
+      '''
+  ]);
+
 final ShaderObject VertexShader = ShaderObject("SkyV")
   ..AddAttributeVars([aPosition, aTexUV])
   ..AddVaryingVars(['vRayDirection'])
@@ -17,16 +42,6 @@ void main() {
     vec3 clippos = vec3(aTexUV * 2.0 - 1.0, 0.99995);
     vRayDirection = invcamera * clippos;
     gl_Position = vec4(clippos, 1.0);
-}
-      '''
-  ]);
-
-final ShaderObject GradientFragmentShader = ShaderObject("SkyFPlain")
-  ..AddVaryingVars(['vRayDirection'])
-  ..SetBody([
-    '''
-void main() {
-    oFragColor = vec4(normalize(abs(vRayDirection)), 1.0);
 }
       '''
   ]);

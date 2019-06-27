@@ -289,7 +289,7 @@ class Scene {
 
   Scene.Sky2(CGL.ChronosGL cgl, int w, int h) {
     program = CGL.RenderProgram(
-        "sky2", cgl, SKY.VertexShader, SKY.GradientFragmentShader);
+        "sky2", cgl, SKY.GradientVertexShader, SKY.GradientFragmentShader);
     mesh = CGL.ShapeQuad(program, 1);
     mat = CGL.Material('sky');
   }
@@ -702,8 +702,8 @@ class AllScenes {
       case "wireframe-outside":
         outsideWireframeBuildings.Draw(cgl, perspective);
         outsideStreet.Draw(cgl, perspective);
-        //sky2.Draw(cgl, perspective);
-        sky.Draw(cgl, perspective);
+        sky2.Draw(cgl, perspective);
+        //sky.Draw(cgl, perspective);
         portal.Draw(cgl, perspective);
         break;
       case "wireframe-orbit":
@@ -721,8 +721,8 @@ class AllScenes {
       case "sketch-outside":
         outsideSketch.Draw(cgl, perspective);
         outsideStreet.Draw(cgl, perspective);
-        //sky2.Draw(cgl, perspective);
-        sky.Draw(cgl, perspective);
+        sky2.Draw(cgl, perspective);
+        //sky.Draw(cgl, perspective);
         portal.Draw(cgl, perspective);
         break;
       case "night-outside":
